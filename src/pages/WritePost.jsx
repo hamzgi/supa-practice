@@ -17,6 +17,7 @@ export default function WritePost({ user }) {
       title,
       content,
       user_id: user.id,
+      user_nickname: user.user_metadata?.nickname,
     });
 
     if (error) {

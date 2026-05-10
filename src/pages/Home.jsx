@@ -82,7 +82,7 @@ export default function Home({ user }) {
               <>
                 <h3 className="card-title">{post.title}</h3>
                 <div className="card-meta">
-                  작성자: <strong>{post.user_email || post.user_id}</strong> • {new Date(post.created_at).toLocaleString()}
+                  작성자: <strong>{post.user_nickname || post.user_email || post.user_id}</strong> • {new Date(post.created_at).toLocaleString()}
                 </div>
                 <div className="card-content">
                   {post.content.split('\n').map((line, idx) => (
