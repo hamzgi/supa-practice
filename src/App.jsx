@@ -4,6 +4,7 @@ import { supabase } from "./assets/supabase"
 function App() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [nickname, setNickname] = useState('')
   const [user, setUser] = useState(null)
 
   const [title, setTitle] = useState('')
@@ -65,6 +66,11 @@ function App() {
     const { error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: {
+          nickname,
+        },
+      },
     })
 
     if (error) {
@@ -131,7 +137,7 @@ function App() {
 
       {user ? (
         <>
-          <p>로그인됨: {user.email}</p>
+          <p>환영합니다! {user.user_metadata?.nickname || user.email}님</p>
 
           <button onClick={logout}>로그아웃</button>
 
@@ -181,6 +187,16 @@ function App() {
           <br />
           <br />
 
+          <span>Nickname : </span>
+          <input
+            type="text"
+            placeholder="nickname (회원가입 시)"
+            onChange={(e) => setNickname(e.target.value)}
+          />
+
+          <br />
+          <br />
+
           <button onClick={login}>로그인</button>
 
           <br />
@@ -223,6 +239,11 @@ function App() {
           ) : (
             <>
               <h3>{post.title}</h3>
+              <div style={{ fontSize: '12px', color: '#666', marginBottom: '10px' }}>
+                <span>작성자: {post.user_email || post.user_id}</span>
+                <br />
+                <span>시간: {new Date(post.created_at).toLocaleString()}</span>
+              </div>
               <p>{post.content}</p>
               {user && user.id === post.user_id && (
                 <>
