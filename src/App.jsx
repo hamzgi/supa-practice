@@ -156,6 +156,7 @@ function App() {
         </>
       ) : (
         <>
+          <span>Email : </span>
           <input
             type="email"
             placeholder="email"
@@ -165,6 +166,7 @@ function App() {
           <br />
           <br />
 
+          <span>Password : </span>
           <input
             type="password"
             placeholder="password"
@@ -174,9 +176,12 @@ function App() {
           <br />
           <br />
 
-          <button onClick={signUp}>회원가입</button>
-
           <button onClick={login}>로그인</button>
+
+          <br />
+          <br />
+
+          <button onClick={signUp}>회원가입</button>
         </>
       )}
 
@@ -189,6 +194,7 @@ function App() {
           key={post.id}
           style={{
             border: '1px solid gray',
+            borderRadius: '8px',
             marginBottom: '10px',
             padding: '10px',
           }}
