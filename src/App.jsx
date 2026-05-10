@@ -10,6 +10,10 @@ function App() {
   const [content, setContent] = useState('')
   const [posts, setPosts] = useState([])
 
+  const [editingPostId, setEditingPostId] = useState(null)
+  const [editTitle, setEditTitle] = useState('')
+  const [editContent, setEditContent] = useState('')
+
   const getPosts = async () => {
     const { data, error } = await supabase
       .from('posts')
@@ -107,8 +111,8 @@ function App() {
     const { error } = await supabase
       .from('posts')
       .update({
-        title,
-        content,
+        title: editTitle,
+        content: editContent,
       })
       .eq('id', id)
 
@@ -116,13 +120,14 @@ function App() {
       alert(error.message)
     } else {
       await getPosts()
+      setEditingPostId(null)
       alert('수정 완료')
     }
   }
 
   return (
     <div style={{ padding: '30px' }}>
-      <h1>Supabase 게시판</h1>
+      <h1>멋쟁이 형진이의 게시판</h1>
 
       {user ? (
         <>
@@ -199,20 +204,43 @@ function App() {
             padding: '10px',
           }}
         >
-          <h3>{post.title}</h3>
-          <p>{post.content}</p>
-          {user && user.id === post.user_id && (
+          {editingPostId === post.id ? (
             <>
-              <button onClick={() => updatePosts(post.id)}>
-                수정
-              </button>
+              <input
+                type="text"
+                value={editTitle}
+                onChange={(e) => setEditTitle(e.target.value)}
+                style={{ display: 'block', marginBottom: '5px' }}
+              />
+              <textarea
+                value={editContent}
+                onChange={(e) => setEditContent(e.target.value)}
+                style={{ display: 'block', marginBottom: '5px' }}
+              />
+              <button onClick={() => updatePosts(post.id)}>저장</button>
+              <button onClick={() => setEditingPostId(null)}>취소</button>
+            </>
+          ) : (
+            <>
+              <h3>{post.title}</h3>
+              <p>{post.content}</p>
+              {user && user.id === post.user_id && (
+                <>
+                  <button onClick={() => {
+                    setEditingPostId(post.id);
+                    setEditTitle(post.title);
+                    setEditContent(post.content);
+                  }}>
+                    수정
+                  </button>
 
-              <button onClick={() => deletePost(post.id)}>
-                삭제
-              </button>
+                  <button onClick={() => deletePost(post.id)}>
+                    삭제
+                  </button>
+                </>
+              )}
             </>
           )}
-
         </div>
       ))}
     </div>
